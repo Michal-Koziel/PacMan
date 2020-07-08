@@ -1,9 +1,7 @@
 package States;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
 import Graphics.Assets;
 import Main.Handler;
@@ -23,7 +21,7 @@ public class PauseMenuState extends State {
 		handler.getMouseManager().setUImanager(uiManagerP);
 		W = handler.getWorld();
 		
-		uiManagerP.addObject(new UIImageButton(422,400,500,100,Assets.buttonBack, new ClickListener() {
+		uiManagerP.addObject(new UIImageButton(387,420,600,100,Assets.buttonResume, new ClickListener() {
 			@Override
 			public void OnClick() {
 				handler.getMouseManager().setUImanager(null);
@@ -50,9 +48,17 @@ public class PauseMenuState extends State {
 		W.render(g);
 		g.drawImage(Assets.Background,322,100,700,600, null);
 		uiManagerP.render(g);
-		g.setFont(new Font("CooperBlack", Font.BOLD, 90));
-		g.setColor(Color.black);
-		g.drawString("Game Paused",380,250);
+		g.drawImage(Assets.GamePaused,380,130,600,100,null);
+		g.drawImage(Assets.CookieMButton[0],400,280,64,64,null);
+		g.drawImage(Assets.Cookie,470,300,64,64,null);
+		g.drawImage(Assets.Cookie,520,270,64,64,null);
+		g.drawImage(Assets.Cookie,570,300,64,64,null);
+		g.drawImage(Assets.Cookie,620,270,64,64,null);
+		g.drawImage(Assets.Cookie,670,300,64,64,null);
+		g.drawImage(Assets.Cookie,720,270,64,64,null);
+		g.drawImage(Assets.Cookie,770,300,64,64,null);
+		g.drawImage(Assets.Cookie,820,270,64,64,null);
+		g.drawImage(Assets.Cookie,870,300,64,64,null);
 	}
 
 }

@@ -27,6 +27,7 @@ public class ScoreState extends State {
 				handler.getMouseManager().setUImanager(null);
 				State.setState(handler.getGame().menustate);
 			}}));
+		
 	}
 	
 	@Override

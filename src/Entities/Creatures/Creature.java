@@ -42,7 +42,7 @@ public abstract class Creature extends Entity {
 					x=(-width); 
 				
 			}else {
-				x= tx * Tiles.TILEWIDTH - bounds.x - bounds.width -1;
+					x= tx * Tiles.TILEWIDTH - bounds.x - bounds.width -1;
 			}
 			
 		} else if(xMove<0) {   // Moving left
@@ -56,7 +56,7 @@ public abstract class Creature extends Entity {
 						x=(handler.getWorld().getWidth()*Tiles.TILEWIDTH);
 					
 			}else {
-				x= tx * Tiles.TILEWIDTH + Tiles.TILEWIDTH - bounds.x;
+					x= tx * Tiles.TILEWIDTH + Tiles.TILEWIDTH - bounds.x;
 			}	
 		}	
 	}
@@ -71,7 +71,7 @@ public abstract class Creature extends Entity {
 				if(x>0 && x<(handler.getWorld().getWidth()*Tiles.TILEWIDTH)) 
 					y+=yMove;  // W³aœciwy ruch
 			}else{
-				y = ty * Tiles.TILEHEIGHT - bounds.y - bounds.height -1;			
+					y = ty * Tiles.TILEHEIGHT - bounds.y - bounds.height -1;			
 			}
 			
 		} else if(yMove<0) {   // Moving up
@@ -82,7 +82,7 @@ public abstract class Creature extends Entity {
 				if(x>0 && x<(handler.getWorld().getWidth()*Tiles.TILEWIDTH)) 
 					y+=yMove; // W³aœciwy ruch
 			}else {
-				y= ty * Tiles.TILEHEIGHT +Tiles.TILEHEIGHT - bounds.y;
+					y= ty * Tiles.TILEHEIGHT +Tiles.TILEHEIGHT - bounds.y;
 			}
 		}	
 	}

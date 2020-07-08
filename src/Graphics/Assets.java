@@ -9,11 +9,12 @@ public class Assets {
 	
 	public static BufferedImage BlueBrick,BlueBrokenBrick,RedBrick,RedBrokenBrick,BlueDoor,
 	RedDoor,Grass,GrassDoor, BlueBrickClosed,RedBrickClosed,Cookie,RedFloor,BlueFloor,Wood,
-	ClosedWood, GameOver, MenuReturn, YourScore,LevelCompleted,NextLevel,Background; 
+	ClosedWood, GameOver, MenuReturn, YourScore,GamePaused ,LevelCompleted ,NextLevel,Background,PowerUp; 
 	public static BufferedImage[] PlayerDown,PlayerUp,PlayerLeft,PlayerRight,
 	InkyDown,InkyUp,InkyLeft,InkyRight,BlinkyDown,BlinkyUp,BlinkyLeft,BlinkyRight,
 	ClydeDown,ClydeUp,ClydeLeft,ClydeRight,PinkyDown,PinkyUp,PinkyLeft,PinkyRight,
-	buttonStart, buttonEnd,buttonOption,buttonScore,buttonBack,buttonPlayer,buttonMap,
+	ReturnDown,ReturnUp,ReturnLeft,ReturnRight,EscapeDown,EscapeUp,EscapeLeft,EscapeRight,
+	buttonStart, buttonEnd,buttonOption,buttonScore,buttonBack,buttonPlayer,buttonMap, buttonResume,
 	PacManButton, HoboButton, CatManButton, CookieMButton,BlueMap,RedMap,GreenMap;
 	
 	private static int characterNumber1 = 0; // zmienne wyboru bohatera, zale¿nie od nich Pac Man ma inn¹ grafikê
@@ -30,13 +31,14 @@ public class Assets {
 		SpriteSheet sheetBack = new SpriteSheet(ImageLoader.loadImage("/textures/sheetBackground.png"));
 	
 		// buttons
-		buttonStart = new BufferedImage[2];	 buttonEnd = new BufferedImage[2];
-		buttonOption = new BufferedImage[2]; buttonScore = new BufferedImage[2];
-		buttonBack = new BufferedImage[2];   buttonPlayer = new BufferedImage[2];
-		buttonMap = new BufferedImage[2];    CookieMButton = new BufferedImage[2];
-		PacManButton = new BufferedImage[2]; HoboButton = new BufferedImage[2];
-		CatManButton = new BufferedImage[2]; BlueMap = new BufferedImage[2];
-		RedMap = new BufferedImage[2];		 GreenMap = new BufferedImage[2];
+		buttonStart = new BufferedImage[2];	  buttonEnd = new BufferedImage[2];
+		buttonOption = new BufferedImage[2];  buttonScore = new BufferedImage[2];
+		buttonBack = new BufferedImage[2];    buttonPlayer = new BufferedImage[2];
+		buttonMap = new BufferedImage[2];     buttonResume = new BufferedImage[2];
+		CookieMButton = new BufferedImage[2]; CatManButton = new BufferedImage[2];
+		PacManButton = new BufferedImage[2];  HoboButton = new BufferedImage[2];
+		BlueMap = new BufferedImage[2]; 	  GreenMap = new BufferedImage[2];
+		RedMap = new BufferedImage[2];	
 
 		buttonStart[0]= sheetMenu.crop(0*500, 0*100, 1*500, 1*100);
 		buttonStart[1]= sheetMenu.crop(1*500, 0*100, 1*500, 1*100);
@@ -54,6 +56,8 @@ public class Assets {
 		buttonMap[1]= sheetMenu.crop(3*500, 0*100, 1*500, 1*100);
 		buttonScore[0]= sheetMenu.crop(0*500, 3*100, 1*500, 1*100);
 		buttonScore[1]= sheetMenu.crop(1*500, 3*100, 1*500, 1*100);
+		buttonResume[0] = sheetMenu.crop(2*500, 1*100, 1*600, 1*100);
+		buttonResume[1] = sheetMenu.crop(2*500, 2*100, 1*600, 1*100);	
 		
 		PacManButton[0]= sheetP.crop(0*width, 1*height, width, height);
 		PacManButton[1]= sheetP.crop(0*width, 0*height, width, height);
@@ -137,16 +141,45 @@ public class Assets {
 		PinkyRight[1] = sheetG.crop(4*width, 2*height, width, height);
 		PinkyRight[0] = sheetG.crop(4*width, 3*height, width, height);
 		
+		ReturnDown = new BufferedImage[2];
+		ReturnUp = new BufferedImage[2];
+		ReturnLeft = new BufferedImage[2];
+		ReturnRight = new BufferedImage[2];
+		ReturnDown[1] = sheetG.crop(6*width, 4*height, width, height);
+		ReturnDown[0] = sheetG.crop(6*width, 5*height, width, height);
+		ReturnUp[1] = sheetG.crop(7*width, 4*height, width, height);
+		ReturnUp[0] = sheetG.crop(7*width, 5*height, width, height);
+		ReturnLeft[1] = sheetG.crop(5*width, 4*height, width, height);
+		ReturnLeft[0] = sheetG.crop(5*width, 5*height, width, height);
+		ReturnRight[1] = sheetG.crop(4*width, 4*height, width, height);
+		ReturnRight[0] = sheetG.crop(4*width, 5*height, width, height);
+		
+		EscapeDown = new BufferedImage[2];
+		EscapeUp = new BufferedImage[2];
+		EscapeLeft = new BufferedImage[2];
+		EscapeRight = new BufferedImage[2];
+		EscapeDown[1] = sheetG.crop(2*width, 4*height, width, height);
+		EscapeDown[0] = sheetG.crop(2*width, 5*height, width, height);
+		EscapeUp[1] = sheetG.crop(3*width, 4*height, width, height);
+		EscapeUp[0] = sheetG.crop(3*width, 5*height, width, height);
+		EscapeLeft[1] = sheetG.crop(1*width, 4*height, width, height);
+		EscapeLeft[0] = sheetG.crop(1*width, 5*height, width, height);
+		EscapeRight[1] = sheetG.crop(0*width, 4*height, width, height);
+		EscapeRight[0] = sheetG.crop(0*width, 5*height, width, height);
+		
 		// Strings
 		GameOver = sheetStrings.crop(0*600, 0*100, 600, 100);
 		YourScore = sheetStrings.crop(0*600, 1*100, 600, 200);
 		MenuReturn = sheetStrings.crop(0*600, 3*100, 600, 200);
 		LevelCompleted = sheetStrings.crop(1*600, 0*100, 600, 200);
 		NextLevel = sheetStrings.crop(1*600, 3*100, 600, 200);
+		GamePaused = sheetStrings.crop(0*600, 5*100, 600, 100);
 		Background =  sheetBack.crop(0,0, 700, 600);
+
 		
 		// Static Objects
 		Cookie = sheetObj.crop(0*width, 0*height, width, height);
+		PowerUp = sheetObj.crop(0*width, 1*height, width, height);
 		
 		// Tiles
 		BlueBrick = sheet.crop(0, 2*height, width, height);

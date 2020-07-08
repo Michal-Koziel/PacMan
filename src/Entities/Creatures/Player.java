@@ -13,6 +13,8 @@ import World.World;
 
 // Klasa Gracza
 public class Player extends Creature {
+	public static boolean PowerUpOn = false;
+	public int counter = 0;
 	
 	//Animation
 	private Animation AnimDown,AnimUp,AnimLeft,AnimRight;
@@ -37,7 +39,7 @@ public class Player extends Creature {
 	public void update() {
 		 // Jeœli Pac Man opuœci miejsce staru gra wystartuje
 		if(handler.getGame().gamestate.IsGameStopped) {  
-			if(x>=10.5*Tiles.TILEWIDTH || x<=9.5*Tiles.TILEWIDTH || y>=12.1*Tiles.TILEHEIGHT)
+			if(x>=handler.getWorld().getSpawnX()+0.5*Tiles.TILEWIDTH || x<=handler.getWorld().getSpawnX()-0.5*Tiles.TILEWIDTH || y>=handler.getWorld().getSpawnY()+0.2*Tiles.TILEHEIGHT|| y<=handler.getWorld().getSpawnY()-0.5*Tiles.TILEHEIGHT)
 			handler.getGame().gamestate.IsGameStopped = false;		
 		}
 		//Animation
@@ -51,6 +53,14 @@ public class Player extends Creature {
 		Move();
 		checkEntityCollision(0f,0f);
 		handler.getGameCamera().CenterOnEntity(this);
+		
+		if(Player.PowerUpOn==true) {
+			counter++;
+			if(counter == 2) {
+				Player.PowerUpOn=false;
+				counter = 0;
+			}
+		}
 	}
 	
 	// Pobranie ruchu z klawiatury
@@ -85,12 +95,20 @@ public class Player extends Creature {
 			
 			// Jeœli spotka ducha, umiera
 			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)) && e.IsGhost() ) {
-				Dying();
+				if(e.IsAgressive())
+					Dying();
 			}
 			// Jeœli spotka jedzenie, punktuje
 			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)) && e.IsFood() ) {
 			    Scoring(e);
 			}	
+			
+			// Jeœli spotka power up, punktuje
+			if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)) && e.IsPowerUp() ) {
+			    Scoring(e);
+			    Player.PowerUpOn = true;
+			    counter = 0;
+			}
 		}
 	}
 	
@@ -173,5 +191,10 @@ public class Player extends Creature {
 	public Animation getAnimRight() {
 		return AnimRight;
 	}
-
+	
+	@Override
+	// Sprawdzenie czy jednostka jest graczem
+	public boolean IsPlayer() {
+		return true;
+	}
 }

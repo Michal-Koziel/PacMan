@@ -37,7 +37,7 @@ public class DeadState extends State {
 			Counter = 0;
 			PointsRenderHelper =0;
 			handler.getWorld().ResetWorld();
-			State.setState(handler.getGame().menustate);	
+			State.setState(handler.getGame().menustate);
 		}
 		Counter++;
 	}

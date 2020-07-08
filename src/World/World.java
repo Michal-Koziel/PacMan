@@ -1,5 +1,7 @@
 package World;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import Entities.Entity;
@@ -10,6 +12,7 @@ import Entities.Creatures.Inky;
 import Entities.Creatures.Pinky;
 import Entities.Creatures.Player;
 import Entities.Statics.Food;
+import Entities.Statics.PowerUp;
 import Graphics.Assets;
 import Main.Handler;
 import Tile.Tiles;
@@ -19,10 +22,16 @@ import Utilities.Utils;
 public class World {
 
 	public static final int PointsPerFood = 10;
+
 	private Handler handler;
 	private int width,height;
 	private int SpawnX,SpawnY;
 	private int[][] Worldtiles;
+	
+	private int FoodPerPowerUp = 20;
+	int Foodcounter = 0;
+	int Randomizer = Utils.RandomNumber.nextInt(4)+1; 
+	
 	// Scoring
 	private int points=0;
 	private int maxPoints=0;
@@ -36,34 +45,42 @@ public class World {
 		entityManager = new EntityManager(handler,new Player(handler,SpawnX,SpawnY));
 		handler.setPlayer(entityManager.getPlayer());
 		
+		entityManager.addEntity(new Pinky(handler,SpawnX,SpawnY-3*Tiles.TILEHEIGHT));
+		entityManager.addEntity(new Blinky(handler,SpawnX,SpawnY-2*Tiles.TILEHEIGHT));
+		entityManager.addEntity(new Clyde(handler,SpawnX,SpawnY-3*Tiles.TILEHEIGHT));
+		entityManager.addEntity(new Inky(handler,SpawnX,SpawnY-2*Tiles.TILEHEIGHT,entityManager.getEntities().get(3)));
+		
 		// generacja jedzenia
 		for(int y=0;y<height;y++) {
 			for(int x=0;x<width;x++) {
 				if(Worldtiles[x][y] == 10 || Worldtiles[x][y] == 9 || Worldtiles[x][y] == 0) 
 					// Wyklucza wnetrze domu duchow i punkt startowy paca
 					if( !( (x >= SpawnX/Tiles.TILEWIDTH -3 && x <= SpawnX/Tiles.TILEWIDTH +3) && (y>=SpawnY/Tiles.TILEHEIGHT-6  && y<=SpawnY/Tiles.TILEHEIGHT)) ) {
-						entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+						Foodcounter++;
+						if(Foodcounter>=(FoodPerPowerUp+Randomizer)) {
+							entityManager.addEntity(new PowerUp(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+							Foodcounter=0;
+							Randomizer = Utils.RandomNumber.nextInt(4)+1; 
+						}
+						else
+							entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
 						maxPoints+=1*PointsPerFood;
 					}
 			}
 		}
+		Foodcounter=0;
 		
-		entityManager.addEntity(new Pinky(handler,SpawnX,SpawnY-3*Tiles.TILEHEIGHT));
-		entityManager.addEntity(new Blinky(handler,SpawnX,SpawnY-2*Tiles.TILEHEIGHT));
-		entityManager.addEntity(new Clyde(handler,SpawnX,SpawnY-3*Tiles.TILEHEIGHT));
-		entityManager.addEntity(new Inky(handler,SpawnX,SpawnY-2*Tiles.TILEHEIGHT,entityManager.getEntities().get(3)));
+		
 	}
 	
 	public void update() {
-		// Je¿eli GameIsStopped tylko pac man mo¿e siê ruszaæ, co "odpauzowuje gre"
-		if(!handler.getGame().gamestate.IsGameStopped)
 			entityManager.update();
-		if(handler.getGame().gamestate.IsGameStopped)	
-			handler.getPlayer().update();
 	}
 	
 	// Wyœwietlenie œwiata przy poprawce na offset kamery
 	public void render(Graphics G) {	
+		G.setColor(Color.BLACK);
+		G.setFont(new Font("CooperBlack", Font.BOLD, 70));
 		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset()/Tiles.TILEWIDTH);
 		int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth())/Tiles.TILEWIDTH+1);
 		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset()/Tiles.TILEHEIGHT);
@@ -77,11 +94,14 @@ public class World {
 		}
 		
 		entityManager.render(G);
-		
+
 		// narysowanie zyc pac mana
 		for(int i=0; i<handler.getPlayer().getHealth();i++) {
 			G.drawImage(Assets.PlayerRight[1],50 + i*100,730,64,64, null);
 		}
+		
+		// wypisanie punktów
+		G.drawString(Integer.toString(points), 1185, 790);
 	}
 	
 	public Tiles getTile(int x,int y) {
@@ -126,10 +146,12 @@ public class World {
 				e.setY(SpawnY-2*Tiles.TILEHEIGHT);
 			}
 			//reset jedzenia
-			if(e.IsFood()) {
+			if(e.IsFood() || e.IsPowerUp()) {
 				e.ChangeActivity();
 			}
 		}	
+		
+		FoodPerPowerUp = 20;
 		
 		// nowe jedzenie
 		for(int y=0;y<height;y++) {
@@ -137,11 +159,23 @@ public class World {
 				if(Worldtiles[x][y] == 10 || Worldtiles[x][y] == 9 || Worldtiles[x][y] == 0) 
 					// Wyklucza wnetrze domu duchow i punkt startowy pac Mana
 					if( !( (x >= SpawnX/Tiles.TILEWIDTH -3 && x <= SpawnX/Tiles.TILEWIDTH +3) && (y>=SpawnY/Tiles.TILEHEIGHT-6  && y<=SpawnY/Tiles.TILEHEIGHT)) ) {
-						entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+						Foodcounter++;
+						if(Foodcounter>=(FoodPerPowerUp+Randomizer)) {
+							entityManager.addEntity(new PowerUp(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+							Foodcounter=0;
+							Randomizer = Utils.RandomNumber.nextInt(4)+1; 
+						}
+						else
+							entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
 						maxPoints+=1*PointsPerFood;
 					}
 			}
 		}
+		Foodcounter=0;
+
+		
+		
+		
 	}
 	
 	// Przechodzi do nastêpnego poziomu
@@ -149,16 +183,18 @@ public class World {
 		// reset duchow i gracza
 		handler.getPlayer().setX(SpawnX);
 		handler.getPlayer().setY(SpawnY);
-		for(Entity e :handler.getWorld().getEntityManager().getEntities() ) {
+		for(Entity e :getEntityManager().getEntities() ) {
 			if(e.IsGhost()) {
 				e.setX(SpawnX);
 				e.setY(SpawnY-2*Tiles.TILEHEIGHT);
 			}
 			//reset jedzenia
-			if(e.IsFood()) {
+			if(e.IsFood() || e.IsPowerUp()) {
 				e.ChangeActivity();
 			}
 		}	
+		
+			FoodPerPowerUp+=5;
 		
 		// nowe jedzenie
 		for(int y=0;y<height;y++) {
@@ -166,11 +202,19 @@ public class World {
 				if(Worldtiles[x][y] == 10 || Worldtiles[x][y] == 9 || Worldtiles[x][y] == 0) 
 					// Wyklucza wnetrze domu duchow i punkt startowy paca
 					if( !( (x >= SpawnX/Tiles.TILEWIDTH -3 && x <= SpawnX/Tiles.TILEWIDTH +3) && (y>=SpawnY/Tiles.TILEHEIGHT-6  && y<=SpawnY/Tiles.TILEHEIGHT)) ) {
-						entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+						Foodcounter++;
+						if(Foodcounter>=(FoodPerPowerUp+Randomizer)) {
+							entityManager.addEntity(new PowerUp(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
+							Foodcounter=0;
+							Randomizer = Utils.RandomNumber.nextInt(4)+1; 
+						}
+						else
+							entityManager.addEntity(new Food(handler,x*Tiles.TILEWIDTH,y*Tiles.TILEHEIGHT));
 						maxPoints+=1*PointsPerFood;
 					}
 			}
 		}
+		Foodcounter=0;
 	}
 	
 	public void ResetCreatures() {
@@ -210,6 +254,10 @@ public class World {
 		points +=number;
 	}
 	
+	public void addMaxPoints(int number) {
+		maxPoints +=number;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -227,6 +275,14 @@ public class World {
 	
 	public EntityManager getEntityManager() {
 		return entityManager;
+	}
+	
+	public int getSpawnX() {
+		return SpawnX;
+	}
+	
+	public int getSpawnY() {
+		return SpawnY;
 	}
 
 }

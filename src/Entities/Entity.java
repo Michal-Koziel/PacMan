@@ -45,10 +45,27 @@ public abstract class Entity {
 		return false;
 	}
 	
+	// Sprawdzenie czy jednostka jest agresywna
+	public boolean IsAgressive() {
+		return false;
+	}
+	
+	
 	// Sprawdzenie czy jednostka jest jedzeniem
 	public boolean IsFood() {
 		return false;
 	}
+	
+	// Sprawdzenie czy jednostka jest graczem
+	public boolean IsPlayer() {
+		return false;
+	}
+	
+	// Sprawdzenie czy jednostka jest power upem
+	public boolean IsPowerUp() {
+		return false;
+	}
+	
 	
 	// getters and setters x,y,width,height
 	public float getX() {

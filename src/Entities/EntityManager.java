@@ -38,6 +38,8 @@ public class EntityManager {
 	public void update() {
 		for(int i=0;i<entities.size();i++) {
 			Entity e = entities.get(i);
+			// Je¿eli GameIsStopped tylko pac man mo¿e siê ruszaæ, co "odpauzowuje gre" (jedzenie te¿ mo¿e siê updatowaæ)
+			if(!handler.getGame().gamestate.IsGameStopped || e.IsFood() || e.IsPowerUp() || e.IsPlayer())
 			e.update();
 			if(e.IsActive()==false)
 				entities.remove(e);
@@ -47,7 +49,11 @@ public class EntityManager {
 	
 	// Wyœwietlenie wszystkich jednostek
 	public void render(Graphics G) {
-		for(int i=0;i<entities.size();i++) {
+		for(int i=5;i<entities.size();i++) {
+			Entity e = entities.get(i);
+			e.render(G);
+		}
+		for(int i=0;i<5;i++) {
 			Entity e = entities.get(i);
 			e.render(G);
 		}

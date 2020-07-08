@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 // Klasa z przydatnymi funkcjami
 public class Utils {
+	
+	public static Random RandomNumber = new Random();
 	
 	public static String loadFileAsString(String path){
 		StringBuilder builder = new StringBuilder();
